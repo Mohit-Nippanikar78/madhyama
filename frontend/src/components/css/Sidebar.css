@@ -1,0 +1,119 @@
+:root {
+  --nav-height: 80px;
+  --brand-purple: #d83f87;
+  --brank-violet: #2a1b3d;
+  --brand-gold: #cd9806;
+  --sidebar-width: 18%;
+  --main-color: #f0f0f0;
+}
+@font-face {
+  font-family: Aquire;
+  src: url();
+}
+.sidebar {
+  background: var(--brand-purple);
+  color: white;
+  min-width: 210px;
+  height: 100%;
+  left: 0px;
+  display: flex;
+  flex-direction: column;
+
+  /* width: var(--sidebar-width); */
+  transition: 1s ease;
+  z-index: 30;
+}
+.sidebar-mid {
+  overflow-y: scroll;
+
+}
+
+.sidebar-mid::-webkit-scrollbar{
+  background-color: var(--brand-purple);
+  width: 10px;
+
+}
+.sidebar-mid::-webkit-scrollbar-thumb{
+  width: 10px;
+  background-color: white;
+  border-radius: 10px;
+}
+.sidebar-start {
+  display: flex;
+  align-items: center;
+  height: var(--nav-height);
+  overflow: hidden;
+  z-index: 12;
+  top: 0;
+  left: 0;
+}
+.sidebar-start-1 {
+  position: static !important;
+}
+.sidebar-start i {
+  padding: 20px;
+  font-size: 25px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.sidebar-mid a {
+  display: flex;
+  padding: 0.3rem 1.5rem 0.3rem 0px;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  border-right: 0;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  cursor: pointer;
+  position: relative;
+  background-color: transparent;
+  text-decoration: none;
+  overflow: hidden;
+  z-index: 1;
+  font-family: inherit;
+}
+
+.sidebar-mid a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  transform: translateX(100%);
+  transition: all 0.3s;
+  z-index: -1;
+}
+.sidebar-mid a:hover {
+  color: var(--brand-purple);
+}
+.sidebar-mid a:hover::before {
+  transform: translateX(0);
+  color: var(--brand-purple);
+}
+.sidebar-mid a i {
+  font-size: 25px;
+  padding: 0px 20px;
+  width: 40px;
+
+  text-align: center;
+}
+
+.sidebar-a-active {
+  background: white !important ;
+  position: relative;
+  color: var(--brand-purple) !important;
+}
+.sidebar-a-active::after {
+  background: var(--brand-purple);
+  width: 25px;
+  height: 25px;
+  content: "";
+  bottom: 11px;
+  position: absolute;
+  right: -15px;
+  transform: rotate(45deg);
+}

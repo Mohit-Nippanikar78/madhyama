@@ -12,16 +12,16 @@ const Pin = ({ pin }) => {
   let navigate = useNavigate();
   let user = fetchUser();
 
-  useEffect(() => {console.log(pin, user); }, []);
+  useEffect(() => {
+    console.log(pin, user);
+  }, []);
   const deletePin = (id) => {
     client.delete(id).then(() => {
       window.location.reload();
     });
   };
-  let alreadySaved = pin?.save?.filter(
-    (item) => item?.userId === user?._id
-  );
-  console.log(alreadySaved)
+  let alreadySaved = pin?.save?.filter((item) => item?.userId === user?._id);
+
   alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
   const savePin = (id) => {
     if (alreadySaved?.length === 0) {
@@ -31,23 +31,22 @@ const Pin = ({ pin }) => {
         .insert("after", "save[-1]", [
           {
             _key: uuidv4(),
-            userId:  user?._id,
+            userId: user?._id,
             postedBy: {
               _type: "postedBy",
               _ref: pin?._id,
             },
-          }
+          },
         ])
         .commit()
         .then(() => {
-          
           console.log("Pin saved");
         });
     }
   };
 
   return (
-    <div className="flex m-2 flex-col">
+    <div className="flex m-2 mt-4 flex-col">
       <div
         className="relative cursor-pointer                       rounded-lg w-max "
         onMouseEnter={() => setPostHovered(true)}
@@ -56,7 +55,7 @@ const Pin = ({ pin }) => {
           navigate(`/pin-detail/${pin._id}`);
         }}
       >
-        <img src={urlFor(pin.image).width(250).url()} alt="" />
+        <img src={urlFor(pin.image).width(250).url()} alt="" className="rounded-lg" />
         {postHovered && (
           <div className=" absolute flex flex-col flex-1  w-full h-full top-0 r-0  flex items-center justify-between ">
             <div className="flex justify-between h-max w-full m-2">
@@ -79,9 +78,8 @@ const Pin = ({ pin }) => {
                     className="p-2 py-0 bg-red-500 rounded-xl text-white"
                     onClick={(e) => {
                       e.stopPropagation();
-                       e.preventDefault()
+                      e.preventDefault();
                       savePin(pin._id);
-                     
                     }}
                   >
                     {" "}
@@ -119,17 +117,19 @@ const Pin = ({ pin }) => {
           </div>
         )}
       </div>
-        <Link
-          to={`/user-profile/${pin?.postedBy._id}`}
-          className="flex gap-2 mt-2 items-center"
-        >
+      <Link
+        to={`/user-profile/${pin?.postedBy._id}`}
+        className="flex gap-2 mt-2 items-center"
+      >
+        {pin && (
           <img
             className="w-8 h-8 rounded-full object-cover"
             src={pin?.postedBy.image}
             alt="user-profile"
           />
-          <p className="font-semibold capitalize">{pin?.postedBy.userName}</p>
-        </Link>
+        )}
+        <p className="font-semibold capitalize">{pin?.postedBy.userName}</p>
+      </Link>
     </div>
   );
 };

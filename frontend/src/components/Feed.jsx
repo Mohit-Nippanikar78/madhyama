@@ -20,17 +20,13 @@ const Feed = () => {
     client.fetch(query).then((data) => {
       setPins(data);
       console.log(data);
+      setLoading(false);
     });
-    setLoading(false);
   }, [categoryId]);
 
   if (loading)
     return <Spinner message="We are adding new Feeds to your feed!" />;
-  return <div>
-
-
-    {pins && <MasonryLayout pins={pins}/>}
-  </div>;
+  return <div>{pins && <MasonryLayout pins={pins} />}</div>;
 };
 
 export default Feed;

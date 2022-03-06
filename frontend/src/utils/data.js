@@ -79,13 +79,13 @@ export const fetchUser = () => {
   return result;
 };
 export const searchQuery = (searchTerm) => {
-  const query = `*[_type == "pin" && title match "${searchTerm}" || category match "${searchTerm}" || about match "${searchTerm}"]{
+  const query = `*[_type == "pin" && title match "${searchTerm}*" || category match "${searchTerm}*" || about match "${searchTerm}*"]{
      image{
          asset -> {
              url
          }
         }
-         , _id ,  postedBY ->{
+         , _id ,  postedBy ->{
              _id,
              userName,
              image
@@ -95,7 +95,7 @@ export const searchQuery = (searchTerm) => {
                  userName,
                  image
              },
-         },
+         },userId
 
 
 
@@ -124,3 +124,63 @@ export const feedQuery = `*[_type == "pin"] | order(_createdAt desc) {
           userId
         },
       } `;
+export const pinDetailQuery = (pinId) => {
+  const query = `*[_type == "pin" && _id == '${pinId}']{
+          _id,
+          about,
+          category,
+          image  {
+            asset ->{
+              url
+            }
+          },
+          postedBy->{
+            _id,
+            userName,
+            image
+          },title,
+          save[]{
+            postedBy->{
+              _id,
+              userName,
+              image
+            }
+
+          },
+          comments[]{
+            comment,_key,
+            postedBy->{
+              _id,
+              userName,
+              image
+            }
+          }
+        }`;
+  return query;
+};
+export const pinDetailMorePinQuery = (pin) => {
+  const query = `*[_type == "pin" && category == "${pin.category}" && _id == '${pin._id}']{
+          _id,
+          about,
+          category,
+          image  {
+            asset ->{
+              url
+            }
+          },
+          postedBy->{
+            _id,
+            userName,
+            image
+          },title,
+          save[]{
+            postedBy->{
+              _id,
+              userName,
+              image
+            }
+
+          }          
+        }`;
+  return query;
+};

@@ -9,7 +9,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }) => {
     return (
       <div className="flex items-center w-full ">
         <div className="flex justify-start items-center focus-within:shadow-md m-4 w-full bg">
-          <IoMdSearch fontSize={20} className="mx-2" />
+          <IoMdSearch fontSize={20} className="mx-2"  />
 
           <input
             type="text"
@@ -18,6 +18,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }) => {
             }}
             value={searchTerm}
             className="p-2 w-full outline-0"
+            onFocus={()=>{navigate("/search")}}
           />
           
         </div>
