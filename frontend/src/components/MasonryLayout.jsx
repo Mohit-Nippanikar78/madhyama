@@ -13,9 +13,12 @@ const MasonryLayout = ({ pins }) => {
   };
   return (
     <div>
-      <Masonry className="animate-slide-fwd">
+      <Masonry
+        className="animate-slide-fwd flex"
+        breakpointCols={breakpointColumnsObj}
+      >
         {pins?.map((pin) => (
-          <Pin key={pin._id} pin={pin} />
+          <Pin pin={pin} key={pin._id} />
         ))}
       </Masonry>
     </div>

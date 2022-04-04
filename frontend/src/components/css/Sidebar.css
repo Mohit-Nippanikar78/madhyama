@@ -117,3 +117,9 @@
   right: -15px;
   transform: rotate(45deg);
 }
+@media only screen and (max-width:768px) {
+  .sidebar-mid{
+    overflow-y: auto;
+  }
+  
+}

@@ -1,0 +1,11 @@
+.pin-detail {
+  height: 80vh;
+}
+@media only screen and (max-width: 768px) {
+  .pin-detail {
+    height: auto;
+  }
+  .pin-details-comments {
+    display: none;
+  }
+}

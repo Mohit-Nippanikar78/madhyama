@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { client, urlFor } from "../client";
 import { useNavigate, Link } from "react-router-dom";
 import { MdDownloadForOffline } from "react-icons/md";
@@ -9,44 +10,24 @@ import { AiTwotoneDelete } from "react-icons/ai";
 
 const Pin = ({ pin }) => {
   const [postHovered, setPostHovered] = useState(false);
+  const [alreadySaved, setAlreadySaved] = useState(false);
+  const [user, setUser] = useState(null);
   let navigate = useNavigate();
-  let user = fetchUser();
+  let { userId } = useParams();
+  useEffect(async () => {
+    let userSt = fetchUser(userId);
 
-  useEffect(() => {
-    console.log(pin, user);
+    await setUser(userSt);
   }, []);
+
   const deletePin = (id) => {
     client.delete(id).then(() => {
       window.location.reload();
     });
   };
-  let alreadySaved = pin?.save?.filter((item) => item?.userId === user?._id);
-
-  alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
-  const savePin = (id) => {
-    if (alreadySaved?.length === 0) {
-      client
-        .patch(id)
-        .setIfMissing({ save: [] })
-        .insert("after", "save[-1]", [
-          {
-            _key: uuidv4(),
-            userId: user?._id,
-            postedBy: {
-              _type: "postedBy",
-              _ref: pin?._id,
-            },
-          },
-        ])
-        .commit()
-        .then(() => {
-          console.log("Pin saved");
-        });
-    }
-  };
 
   return (
-    <div className="flex m-2 mt-4 flex-col">
+    <div className="flex m-2 mt-4 flex-col ">
       <div
         className="relative cursor-pointer                       rounded-lg w-max "
         onMouseEnter={() => setPostHovered(true)}
@@ -55,7 +36,11 @@ const Pin = ({ pin }) => {
           navigate(`/pin-detail/${pin._id}`);
         }}
       >
-        <img src={urlFor(pin.image).width(250).url()} alt="" className="rounded-lg" />
+        <img
+          src={urlFor(pin.image).width(250).url()}
+          alt=""
+          className="rounded-lg"
+        />
         {postHovered && (
           <div className=" absolute flex flex-col flex-1  w-full h-full top-0 r-0  flex items-center justify-between ">
             <div className="flex justify-between h-max w-full m-2">
@@ -67,25 +52,6 @@ const Pin = ({ pin }) => {
                 >
                   <MdDownloadForOffline className="rounded-lg" fontSize={20} />
                 </a>
-              </div>
-              <div className="flex">
-                {alreadySaved.length !== 0 ? (
-                  <button className="p-2 bg-red-500 rounded-2xl text-white">
-                    {pin?.save?.length} Saved
-                  </button>
-                ) : (
-                  <button
-                    className="p-2 py-0 bg-red-500 rounded-xl text-white"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      savePin(pin._id);
-                    }}
-                  >
-                    {" "}
-                    Save{" "}
-                  </button>
-                )}
               </div>
             </div>
             <div className="flex items-center justify-between w-full mb-3">
@@ -118,13 +84,17 @@ const Pin = ({ pin }) => {
         )}
       </div>
       <Link
-        to={`/user-profile/${pin?.postedBy._id}`}
-        className="flex gap-2 mt-2 items-center"
+        to={`profile/${pin?.postedBy._id}`}
+        className="flex gap-2 mt-2 items-center "
       >
         {pin && (
           <img
             className="w-8 h-8 rounded-full object-cover"
-            src={pin?.postedBy.image}
+            src={
+              pin
+                ? pin.postedBy.image
+                : "https://i.pinimg.com/170x/18/b9/ff/18b9ffb2a8a791d50213a9d595c4dd52.jpg"
+            }
             alt="user-profile"
           />
         )}

@@ -68,7 +68,6 @@ export const categories = [
 
 export const userQuery = (userId) => {
   const query = `*[_type == "user" && _id == '${userId}']`;
-  console.log(query);
   return query;
 };
 export const fetchUser = () => {
@@ -144,7 +143,8 @@ export const pinDetailQuery = (pinId) => {
               _id,
               userName,
               image
-            }
+            },
+            userId
 
           },
           comments[]{
@@ -156,6 +156,25 @@ export const pinDetailQuery = (pinId) => {
             }
           }
         }`;
+  return query;
+};
+export const pinDetailComments = (pinId) => {
+  const query = `*[_type == "pin" && _id == "${pinId}"]{
+
+    comments[]{
+      comment,_key,
+      postedBy->{
+        _id,
+        userName,
+        image
+      }
+    }
+
+
+
+
+
+  }`;
   return query;
 };
 export const pinDetailMorePinQuery = (pin) => {
@@ -182,5 +201,51 @@ export const pinDetailMorePinQuery = (pin) => {
 
           }          
         }`;
+  return query;
+};
+export const userCreatedPinsQuery = (userId) => {
+  const query = `*[ _type == 'pin' && userId == '${userId}'] | order(_createdAt desc){
+    image{
+      asset->{
+        url
+      }
+    },
+    _id,
+    postedBy->{
+      _id,
+      userName,
+      image
+    },
+    save[]{
+      postedBy->{
+        _id,
+        userName,
+        image
+      },
+    },
+  }`;
+  return query;
+};
+export const userSavedPinsQuery = (userId) => {
+  const query = `*[ _type == 'pin' && "${userId}" == save[].userId ] | order(_createdAt desc){
+    image{
+      asset->{
+        url
+      }
+    },
+    _id,
+    postedBy->{
+      _id,
+      userName,
+      image
+    },
+    save[]{
+      postedBy->{
+        _id,
+        userName,
+        image
+      },
+    },
+  }`;
   return query;
 };

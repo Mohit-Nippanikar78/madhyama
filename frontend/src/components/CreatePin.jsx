@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { AiOutlineCloudUpload } from "react-icons/ai";
@@ -54,6 +54,7 @@ const CreatePin = ({ user }) => {
   };
   const savePin = () => {
     if (title && about && category && imageAsset?._id) {
+      let userId = user._id;
       const doc = {
         _type: "pin",
         about,
@@ -72,6 +73,7 @@ const CreatePin = ({ user }) => {
         },
 
         title,
+        userId,
       };
       client.create(doc).then(() => {
         navigate("/");
@@ -90,7 +92,10 @@ const CreatePin = ({ user }) => {
   return (
     <>
       {!imageAsset ? (
-        <div className=" w-full px-2 sm:mx-0 sm:w-2/3 " style={{margin:"auto"}}>
+        <div
+          className=" w-full px-2 sm:mx-0 sm:w-2/3 "
+          style={{ margin: "auto" }}
+        >
           <label
             for="file-upload"
             class="block text-sm font-medium text-gray-700"
@@ -176,12 +181,14 @@ const CreatePin = ({ user }) => {
             Please fill in all fields
           </p>
         )}
-       { wrongImageType && <div className="flex flex-col w-2/3  h-1/4 bg-white p-2">
-          <div className="flex flex-col w-full h-full   bg-secondaryColor items-center justify-center">
-            {/* {loading && <Spinner />} */}
-         <p>Wrong Image Type</p>
+        {wrongImageType && (
+          <div className="flex flex-col w-2/3  h-1/4 bg-white p-2">
+            <div className="flex flex-col w-full h-full   bg-secondaryColor items-center justify-center">
+              {/* {loading && <Spinner />} */}
+              <p>Wrong Image Type</p>
+            </div>
           </div>
-        </div>}
+        )}
         <input
           type="text"
           value={title}

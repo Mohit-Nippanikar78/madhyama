@@ -84,10 +84,13 @@ module.exports = {
       'zoom-in': 'zoom-in',
       pointer: 'pointer',
     },
+    
   },
   variants: {
     // backgroundColor: ['active'],
-    extend: {},
+    extend: { 
+      
+    },
   },
   plugins: [],
 };

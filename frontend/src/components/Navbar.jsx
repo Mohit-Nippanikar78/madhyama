@@ -23,7 +23,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }) => {
           
         </div>
         <div className="flex items-center">
-          <Link to={`user-profile/${user._id}`} className=" mx-2 w-14 hidden md:block">
+          <Link to={`/profile/${user._id}`} className=" mx-2 w-14 hidden md:block">
             <img src={user.image} alt="profile"  className="rounded-full"/>
           </Link>
           <Link to="/create-pin" className="mx-2 bg-black text-white rounded-lg w-12 h-12 md:w-14 md:h-12 flex justify-center items-center">

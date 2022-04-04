@@ -24,8 +24,12 @@ const Feed = () => {
     });
   }, [categoryId]);
 
-  if (loading)
+  if (loading) {
     return <Spinner message="We are adding new Feeds to your feed!" />;
+  } else if (pins?.length === 0) {
+    return <div className="mt-10 text-center text-xl ">No Pins Found!</div>;
+  }
+
   return <div>{pins && <MasonryLayout pins={pins} />}</div>;
 };
 
