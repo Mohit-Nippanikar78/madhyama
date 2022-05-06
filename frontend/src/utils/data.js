@@ -154,7 +154,7 @@ export const pinDetailQuery = (pinId) => {
               userName,
               image
             }
-          }
+          },likesCount
         }`;
   return query;
 };

@@ -7,5 +7,22 @@
   }
   .pin-details-comments {
     display: none;
-  }
+  } 
+}
+
+.pin-details-comments::-webkit-scrollbar {
+
+ 
+ width: 0px;
+}
+.pin-details-comments:hover::-webkit-scrollbar {
+
+ 
+ width: 8px;
+}
+.pin-details-comments::-webkit-scrollbar-thumb {
+
+ background-color: var(--brand-purple);
+ border-radius: 10px;
+
 }

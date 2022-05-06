@@ -29,7 +29,7 @@ const Pin = ({ pin }) => {
   return (
     <div className="flex m-2 mt-4 flex-col ">
       <div
-        className="relative cursor-pointer                       rounded-lg w-max "
+        className="relative cursor-pointer                       rounded-lg "
         onMouseEnter={() => setPostHovered(true)}
         onMouseLeave={() => setPostHovered(false)}
         onClick={() => {

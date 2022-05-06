@@ -1,7 +1,7 @@
 export default {
-  name: "pin",
-  title: "Pin",
+  name: "pinVideo",
   type: "document",
+  title: "PinVideo",
   liveEdit: true,
   fields: [
     {
@@ -18,14 +18,6 @@ export default {
       name: "category",
       title: "Category",
       type: "string",
-    },
-    {
-      name: "image",
-      title: "Image",
-      type: "image",
-      options: {
-        hotspot: true,
-      },
     },
     {
       name: "videourl",
@@ -55,14 +47,15 @@ export default {
       of: [{ type: "comment" }],
     },
     {
-      name:"likes",
-      title:"Likes",
-      type:"array",
-      of:[{type:"likes"}]
-    },{
-      name:"likesCount",
-      title:"Likes Numbers ",
-      type:"number"
-    }
+      name: "likes",
+      title: "Likes",
+      type: "array",
+      of: [{ type: "likes" }],
+    },
+    {
+      name: "likesCount",
+      title: "Likes Numbers ",
+      type: "number",
+    },
   ],
 };

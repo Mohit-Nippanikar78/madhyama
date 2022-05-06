@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import Pins from "./Pins";
 import { Sidebar, UserProfile } from "../components";
@@ -9,10 +9,12 @@ import { AiFillCloseCircle } from "react-icons/ai";
 import { client } from "../client";
 import { userQuery, fetchUser } from "../utils/data";
 import { PinDetail, Comments } from "../components";
+import Share from "../components/share";
 
 const Home = ({ updateApp }) => {
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [user, setUser] = useState(null);
+  const [shareBox, setShareBox] = useState(false);
   const scrollRef = useRef(null);
   let navigate = useNavigate();
 
@@ -25,9 +27,22 @@ const Home = ({ updateApp }) => {
   const updatingParent = (bol) => {
     setToggleSidebar(bol);
   };
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
+  const escFunction = useCallback((event) => {
+    if (event.key === "Escape") {
+      setShareBox(false);
+    }
+  }, []);
 
   return (
     <div className="flex bg-grey-50 md:flex-row flex-col h-screen">
+      {shareBox && <Share setShareBox={setShareBox} />}
       <div className="hidden md:flex ">
         <Sidebar user={user && user} updatingParent={updatingParent} />
       </div>
@@ -43,7 +58,7 @@ const Home = ({ updateApp }) => {
           <Link to="/">
             <img src={Logo} className="w-40" alt="logo" />
           </Link>
-          <Link to={`/  profile/${user?._id}`}>
+          <Link to={`/profile/${user?._id}`}>
             <img
               src={
                 user
@@ -74,7 +89,13 @@ const Home = ({ updateApp }) => {
         <Routes>
           <Route
             path="pin-detail/:pinId"
-            element={<PinDetail updateApp={updateApp} user={user && user} />}
+            element={
+              <PinDetail
+                updateApp={updateApp}
+                user={user && user}
+                setShareBox={setShareBox}
+              />
+            }
           />
           <Route
             path="pin-detail/:pinId/comments"

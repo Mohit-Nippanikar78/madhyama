@@ -9,25 +9,22 @@ import Error from "./Error";
 import { v4 as uuidv4 } from "uuid";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaRegComment } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { FiBookmark } from "react-icons/fi";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import AddComment from "../Elements/AddComment";
-const PinDetail = ({ user }) => {
+import CommentBox from "./CommentBox";
+const PinDetail = ({ user, setShareBox }) => {
   let { pinId } = useParams();
+  const [pinLiked, setPinLiked] = useState(false);
   const [pinDetails, setPinDetails] = useState();
   const [loading, setLoading] = useState(false);
   const [comment, setComment] = useState("");
   const [addingComment, setAddingComment] = useState(false);
   const [alreadySaved, setAlreadySaved] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [error, setError] = useState([false, ""]);
-  useEffect(() => {
-    setTimeout(() => {
-      setCopied(false);
-    }, 5000);
-  }, [copied]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -153,34 +150,7 @@ const PinDetail = ({ user }) => {
           </div>
           <div className="md:flex-1  overflow-y-auto pin-details-comments">
             <div id="task-comments" className="pt-4">
-              {pinDetails?.comments?.length == 0 ? (
-                <div className="mt-10 text-center text-xl ">No Comments </div>
-              ) : (
-                pinDetails?.comments?.map((comment, index) => {
-                  return (
-                    <div
-                      className="bg-white  rounded-lg  flex  justify-center items-center md:items-start  mb-4"
-                      key={index}
-                    >
-                      <img
-                        alt="avatar"
-                        className="rounded-full w-8 h-8 mr-2 shadow-lg "
-                        src={comment.postedBy.image}
-                      />
-
-                      <p
-                        style={{ width: " 90%" }}
-                        className="text-gray-600 text-sm text-center md:text-left "
-                      >
-                        <h3 className="text-purple-600 font-semibold text-md text-center md:text-left ">
-                          {comment.postedBy.userName}
-                        </h3>
-                        {comment.comment}
-                      </p>
-                    </div>
-                  );
-                })
-              )}
+              {pinDetails && <CommentBox pinDetails={pinDetails} />}
             </div>
           </div>
 
@@ -223,7 +193,36 @@ const PinDetail = ({ user }) => {
 
           <div className="flex justify-between items-center p-2 bg-red-500  ">
             <div className="flex">
-              <AiOutlineHeart size={25} className="cursor-pointer" />
+              {!pinLiked ? (
+                <AiOutlineHeart
+                  size={25}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    client
+                      .patch(`${pinId}`)
+                      .inc({ likesCount: 1 })
+                      .commit()
+                      .then(console.log("done bro updated"));
+                    setPinLiked(true);
+                  }}
+                />
+              ) : (
+                <AiFillHeart
+                  size={25}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    client
+                      .patch(`${pinId}`)
+                      .dec({ likesCount: 1 })
+                      .commit()
+                      .then(console.log("done bro updated"));
+                    setPinLiked(false);
+                  }}
+                />
+              )}
+              {pinDetails?.likesCount && pinLiked
+                ? pinDetails?.likesCount + 1
+                : pinDetails?.likesCount}
               <Link to={`comments`}>
                 <FaRegComment size={25} className="cursor-pointer mx-2" />
               </Link>
@@ -232,31 +231,26 @@ const PinDetail = ({ user }) => {
                 size={25}
                 className="cursor-pointer"
                 onClick={() => {
-                  setCopied(true);
+                  setShareBox(true);
                 }}
               />
-              {copied && (
-                <button
-                  class=" bg-green-500 delay-75 duration-100 text-white text-sm px-2
-              rounded-2xl  border-b-4 mx-2 border-b-green-600"
-                >
-                  Copied
-                </button>
-              )}
             </div>
-            {alreadySaved ? (
-              <BsFillBookmarkFill size={25} className="cursor-pointer" />
-            ) : (
-              <FiBookmark
-                className="cursor-pointer"
-                size={25}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  savePin(pinDetails._id);
-                }}
-              />
-            )}
+            <div className="flex ">
+              {alreadySaved ? (
+                <BsFillBookmarkFill size={25} className="cursor-pointer" />
+              ) : (
+                <FiBookmark
+                  className="cursor-pointer"
+                  size={25}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    savePin(pinDetails._id);
+                  }}
+                />
+              )}
+              <BsThreeDotsVertical size={25} />
+            </div>
           </div>
         </div>
       </div>

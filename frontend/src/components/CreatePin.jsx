@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import Axios from "axios";
 
 const CreatePin = ({ user }) => {
   let navigate = useNavigate();
@@ -20,12 +21,43 @@ const CreatePin = ({ user }) => {
   const [wrongImageType, setWrongImageType] = useState(false);
   const [imageAsset, setImageAsset] = useState(null);
   const [selected, setSelected] = useState(categories[3]);
+  const [videoUrl, setVideoUrl] = useState(null);
+  let selectedFile;
   useEffect(() => {
     setCategory(selected.name);
   }, [selected]);
-
-  const uploadImage = (event) => {
-    let selectedFile = event.target.files[0];
+  const uploadVideo = () => {
+    let form = new FormData();
+    form.append("file", selectedFile);
+    form.append("upload_preset", "tzhnmdgj");
+    form.append("folder", "Netflix");
+    Axios.post(
+      "https://api.cloudinary.com/v1_1/dk5acaaxg/video/upload",
+      form
+    ).then((Response) => {
+      setVideoUrl(Response.data.url);
+    });
+    
+  };
+  const uploadImage = () => {
+    setWrongImageType(false);
+    setLoading(true);
+    client.assets
+      .upload("image", selectedFile, {
+        filename: selectedFile.name,
+        contentType: selectedFile.type,
+      })
+      .then((document) => {
+        setImageAsset(document);
+        console.log(document);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const uploadContent = (event) => {
+    selectedFile = event.target.files[0];
     if (
       selectedFile.type === "image/png" ||
       selectedFile.type === "image/svg" ||
@@ -33,21 +65,9 @@ const CreatePin = ({ user }) => {
       selectedFile.type === "image/gif" ||
       selectedFile.type === "image/tiff "
     ) {
-      setWrongImageType(false);
-      setLoading(true);
-      client.assets
-        .upload("image", selectedFile, {
-          filename: selectedFile.name,
-          contentType: selectedFile.type,
-        })
-        .then((document) => {
-          setImageAsset(document);
-          console.log(document);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      uploadImage();
+    } else if (selectedFile.type == "video/mp4") {
+      uploadVideo();
     } else {
       setWrongImageType(true);
     }
@@ -74,6 +94,7 @@ const CreatePin = ({ user }) => {
 
         title,
         userId,
+        likesCount: 0,
       };
       client.create(doc).then(() => {
         navigate("/");
@@ -130,7 +151,7 @@ const CreatePin = ({ user }) => {
                       id="file-upload"
                       name="file-upload"
                       type="file"
-                      onChange={uploadImage}
+                      onChange={uploadContent}
                       class="sr-only"
                     />
                   </label>

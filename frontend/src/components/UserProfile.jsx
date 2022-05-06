@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, Routes, Route, useParams, useNavigate } from "react-router-dom";
 import { client } from "../client";
+import { BsThreeDotsVertical } from "react-icons/bs";
+
 import {
   userCreatedPinsQuery,
   userQuery,
@@ -44,7 +46,13 @@ const UserProfile = ({ user }) => {
   if (loading) return <Spinner message="Loading Profile" />;
   return (
     <div>
-      <div className="w-full">
+      <div className="w-full relative">
+        <div
+          className={` cursor-pointer m-2 bg-white hover:bg-gray-100   font-medium rounded-full text-sm  flex items-center p-2.5 text-center  absolute `}
+        >
+          <BsThreeDotsVertical size={20} />
+        </div>
+
         {userDetail._id == user._id && (
           <button
             type="button"
@@ -52,11 +60,12 @@ const UserProfile = ({ user }) => {
               localStorage.removeItem("user");
               window.location.reload();
             }}
-            className={`text-white m-2 bg-red-700 hover:bg-red-800  font-medium rounded-full text-sm px-5 flex items-center p-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 fixed `}
+            className={`top-0 right-4 text-white m-2 bg-red-700 hover:bg-red-800   font-medium rounded-full text-sm px-5 flex items-center p-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 absolute `}
           >
             Log Out
           </button>
         )}
+
         <img
           src="https://wallpaperaccess.com/full/51364.jpg"
           className="w-full   shadow-md "
