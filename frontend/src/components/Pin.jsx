@@ -7,6 +7,7 @@ import { fetchUser, userQuery } from "../utils/data";
 import { v4 as uuidv4 } from "uuid";
 import { BsFillArrowUpRightCircleFill } from "react-icons/bs";
 import { AiTwotoneDelete } from "react-icons/ai";
+import HoverVideoPlayer from "react-hover-video-player";
 
 const Pin = ({ pin }) => {
   const [postHovered, setPostHovered] = useState(false);
@@ -29,29 +30,58 @@ const Pin = ({ pin }) => {
   return (
     <div className="flex m-2 mt-4 flex-col ">
       <div
-        className="relative cursor-pointer                       rounded-lg "
-        onMouseEnter={() => setPostHovered(true)}
-        onMouseLeave={() => setPostHovered(false)}
+        className="relative cursor-pointer                     "
         onClick={() => {
           navigate(`/pin-detail/${pin._id}`);
         }}
+        onMouseEnter={() => setPostHovered(true)}
+        onMouseLeave={() => setPostHovered(false)}
       >
-        <img
-          src={urlFor(pin.image).width(250).url()}
-          alt=""
-          className="rounded-lg"
-        />
-        {postHovered && (
+        {pin?.image ? (
+          <img
+            src={urlFor(pin.image).width(250).url()}
+            alt=""
+            className="rounded-lg"
+          />
+        ) : (
+          <HoverVideoPlayer
+            videoSrc={pin.videourl}
+            pausedOverlay={
+              <img
+                src="https://www.thebalancesmb.com/thmb/6gflK8z4FzPq6JwDNWIGJzlA9w8=/4086x2298/smart/filters:no_upscale()/no-cost-online-business-58a6434c3df78c345bae15ae.jpg"
+                alt=""
+                style={{
+                  // Make the image expand to cover the video's dimensions
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+            }
+            loadingOverlay={
+              <div className="loading-overlay">
+                <div className="loading-spinner" />
+              </div>
+            }
+          />
+        )}
+
+        {postHovered && !pin.videourl && (
           <div className=" absolute flex flex-col flex-1  w-full h-full top-0 r-0  flex items-center justify-between ">
             <div className="flex justify-between h-max w-full m-2">
-              <div className="flex top-0 r-0 bg-white px-2 py-2 rounded-full">
-                <a
-                  href={`${pin.image.asset.url}?dl=`}
-                  download
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <MdDownloadForOffline className="rounded-lg" fontSize={20} />
-                </a>
+              <div className="bg-white p-1 rounded-full  flex items-center justify-center text-dark opacity-75 hover:opacity-100 outline-none">
+                {pin?.image && (
+                  <a
+                    href={`${pin.image.asset.url}?dl=`}
+                    download
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <MdDownloadForOffline
+                      className="rounded-lg"
+                      fontSize={20}
+                    />
+                  </a>
+                )}
               </div>
             </div>
             <div className="flex items-center justify-between w-full mb-3">
@@ -74,9 +104,9 @@ const Pin = ({ pin }) => {
                     e.stopPropagation();
                     deletePin(pin._id);
                   }}
-                  className="bg-white p-2 rounded-full w-8 h-8 flex items-center justify-center text-dark opacity-75 hover:opacity-100 outline-none"
+                  className="bg-white p-1 rounded-full  flex items-center justify-center text-dark opacity-75 hover:opacity-100 outline-none"
                 >
-                  <AiTwotoneDelete />
+                  <AiTwotoneDelete fontSize={20} />
                 </button>
               )}
             </div>

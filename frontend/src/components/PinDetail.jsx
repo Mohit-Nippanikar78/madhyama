@@ -106,12 +106,19 @@ const PinDetail = ({ user, setShareBox }) => {
     <>
       <div className=" bg-white  m-4 md:p-2 p-0 flex-col md:flex-row flex justify-center rounded-lg pin-detail">
         <div className="flex items-center w-full md:w-1/2   ">
-          <img
-            src={pinDetails?.image && urlFor(pinDetails.image).url()}
-            alt=""
-            className="rounded-lg  m-auto   "
-            style={{ maxHeight: "500px" }}
-          />
+          {pinDetails?.image ? (
+            <img
+              src={pinDetails?.image && urlFor(pinDetails.image).url()}
+              alt=""
+              className="rounded-lg  m-auto   "
+              style={{ maxHeight: "500px" }}
+            />
+          ) : (
+            <div className="flex justify-center items-center w-full">
+
+            <video src={pinDetails?.videourl} controls width={window.innerHeight/2}></video>
+            </div>
+          )}
         </div>
         <div className="w-full flex justify-between flex-col md:w-1/2 my-2 md:my-2 md:ml-2  ">
           <div

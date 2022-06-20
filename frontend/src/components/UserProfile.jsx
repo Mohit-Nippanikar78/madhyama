@@ -17,6 +17,7 @@ const UserProfile = ({ user }) => {
   const [pins, setPins] = useState(null);
   const [userDetail, setUserDetail] = useState(null);
   const [togglePins, setTogglePins] = useState("created");
+  const [Extras, setExtras] = useState(true);
   let { userId } = useParams();
   useEffect(() => {
     setLoading(true);
@@ -50,7 +51,15 @@ const UserProfile = ({ user }) => {
         <div
           className={` cursor-pointer m-2 bg-white hover:bg-gray-100   font-medium rounded-full text-sm  flex items-center p-2.5 text-center  absolute `}
         >
-          <BsThreeDotsVertical size={20} />
+          <div className="relative">
+            <BsThreeDotsVertical size={20} />
+            <button
+              class="flex  mt-6 absolute w-max text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-800 rounded text-sm"
+              onClick={() => {}}
+            >
+              Change BG
+            </button>
+          </div>
         </div>
 
         {userDetail._id == user._id && (

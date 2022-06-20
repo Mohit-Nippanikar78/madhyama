@@ -94,7 +94,7 @@ export const searchQuery = (searchTerm) => {
                  userName,
                  image
              },
-         },userId
+         },userId,videourl
 
 
 
@@ -121,7 +121,7 @@ export const feedQuery = `*[_type == "pin"] | order(_createdAt desc) {
             image
           },
           userId
-        },
+        },videourl
       } `;
 export const pinDetailQuery = (pinId) => {
   const query = `*[_type == "pin" && _id == '${pinId}']{
@@ -154,7 +154,8 @@ export const pinDetailQuery = (pinId) => {
               userName,
               image
             }
-          },likesCount
+          },likesCount,
+          videourl
         }`;
   return query;
 };

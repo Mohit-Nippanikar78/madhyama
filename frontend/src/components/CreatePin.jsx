@@ -30,14 +30,13 @@ const CreatePin = ({ user }) => {
     let form = new FormData();
     form.append("file", selectedFile);
     form.append("upload_preset", "tzhnmdgj");
-    form.append("folder", "Netflix");
+    form.append("folder", "madhyama");
     Axios.post(
       "https://api.cloudinary.com/v1_1/dk5acaaxg/video/upload",
       form
     ).then((Response) => {
       setVideoUrl(Response.data.url);
     });
-    
   };
   const uploadImage = () => {
     setWrongImageType(false);
@@ -94,6 +93,26 @@ const CreatePin = ({ user }) => {
 
         title,
         userId,
+        likesCount: 0,
+      };
+      client.create(doc).then(() => {
+        navigate("/");
+      });
+    } else if (title && about && category && videoUrl) {
+      let userId = user._id;
+      const doc = {
+        _type: "pin",
+        about,
+        category,
+
+        postedBy: {
+          _ref: user._id,
+          _type: "postedBy",
+        },
+
+        title,
+        userId,
+        videourl: videoUrl,
         likesCount: 0,
       };
       client.create(doc).then(() => {

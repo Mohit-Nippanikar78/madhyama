@@ -12,7 +12,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }) => {
           <IoMdSearch fontSize={20} className="mx-2"  />
 
           <input
-            type="text"
+            type="text" 
             onChange={(e) => {
               setSearchTerm(e.target.value);
             }}

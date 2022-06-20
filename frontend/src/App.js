@@ -16,6 +16,7 @@ const App = () => {
       navigate("/login", { replace: true });
   }, []);
   const updateApp = (val) => {
+    
     setProgress(val);
   };
 
