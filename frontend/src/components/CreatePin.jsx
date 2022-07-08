@@ -10,6 +10,7 @@ import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import Axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 const CreatePin = ({ user }) => {
   let navigate = useNavigate();
@@ -75,6 +76,7 @@ const CreatePin = ({ user }) => {
     if (title && about && category && imageAsset?._id) {
       let userId = user._id;
       const doc = {
+       
         _type: "pin",
         about,
         category,

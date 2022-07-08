@@ -123,7 +123,8 @@ export const feedQuery = `*[_type == "pin"] | order(_createdAt desc) {
           userId
         },videourl
       } `;
-export const pinDetailQuery = (pinId) => {
+export const pinDetailQuery = (pinId,userId) => {
+  
   const query = `*[_type == "pin" && _id == '${pinId}']{
           _id,
           about,
@@ -155,7 +156,8 @@ export const pinDetailQuery = (pinId) => {
               image
             }
           },likesCount,
-          videourl
+          videourl,      "likes": likes[likedBy._ref == "${userId}"]
+
         }`;
   return query;
 };

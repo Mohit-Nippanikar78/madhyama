@@ -4,13 +4,9 @@ export default {
     type:"document",
     fields:[
         {
-            name:"postedBy",
-            title:"postedBy",
+            name:"likedBy",
+            title:"Liked By",
             type:"postedBy"
-        },{
-            name:"user",
-            title:"User",
-            type:"string"
         }
     ]
 }

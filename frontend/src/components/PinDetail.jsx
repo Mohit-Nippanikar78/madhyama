@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { client } from "../client";
-import { pinDetailQuery } from "../utils/data";
+import { fetchUser, pinDetailQuery } from "../utils/data";
 import { urlFor } from "../client";
 import Spinner from "./Spinner";
 import "./css/PinDetail.css";
@@ -16,31 +16,32 @@ import { FiBookmark } from "react-icons/fi";
 import { BsFillBookmarkFill } from "react-icons/bs";
 import AddComment from "../Elements/AddComment";
 import CommentBox from "./CommentBox";
+import { useNavigate } from "react-router-dom";
+
 const PinDetail = ({ user, setShareBox }) => {
   let { pinId } = useParams();
   const [pinLiked, setPinLiked] = useState(false);
   const [pinDetails, setPinDetails] = useState();
   const [loading, setLoading] = useState(false);
-  const [comment, setComment] = useState("");
-  const [addingComment, setAddingComment] = useState(false);
   const [alreadySaved, setAlreadySaved] = useState(false);
   const [error, setError] = useState([false, ""]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setError([false, ""]);
-    }, 5000);
-  }, [error]);
+  const [likedKey, setLikedKey] = useState(0);
+  const [likesCounts, setLikesCounts] = useState(0);
+  let navigate = useNavigate();
 
   const fetchPinDetails = () => {
     setLoading(true);
-
-    let query = pinDetailQuery(pinId);
+    let ComUser = fetchUser();
+    let query = pinDetailQuery(pinId, ComUser._id);
     if (query) {
-      client.fetch(query).then((data) => {
-        setPinDetails(data[0]);
-        setLoading(false);
-      });
+      client
+        .fetch(query)
+
+        .then((data) => {
+          setPinDetails(data[0]);
+          setLikesCounts(data[0].likesCount);
+          console.log(data[0]);
+        });
     }
   };
   useEffect(() => {
@@ -53,8 +54,14 @@ const PinDetail = ({ user, setShareBox }) => {
         (item) => item?.userId === user?._id
       );
       savedPins = savedPins?.length > 0 ? true : false;
-      console.log(pinDetails);
       setAlreadySaved(savedPins);
+
+      if (pinDetails.likes.length == 1) {
+        setLikedKey(pinDetails.likes[0]._key);
+        setPinLiked(true);
+      }
+
+      setLoading(false);
     }
   }, [pinDetails]);
 
@@ -115,8 +122,11 @@ const PinDetail = ({ user, setShareBox }) => {
             />
           ) : (
             <div className="flex justify-center items-center w-full">
-
-            <video src={pinDetails?.videourl} controls width={window.innerHeight/2}></video>
+              <video
+                src={pinDetails?.videourl}
+                controls
+                width={window.innerHeight / 2}
+              ></video>
             </div>
           )}
         </div>
@@ -205,12 +215,19 @@ const PinDetail = ({ user, setShareBox }) => {
                   size={25}
                   className="cursor-pointer"
                   onClick={() => {
+                    setLikesCounts(likesCounts + 1);
+                    setPinLiked(true);
                     client
                       .patch(`${pinId}`)
+                      .setIfMissing({ likes: [] })
+                      .insert("after", "likes[-1]", [
+                        { _key: uuidv4(), likedBy: { _ref: user._id } },
+                      ])
                       .inc({ likesCount: 1 })
                       .commit()
-                      .then(console.log("done bro updated"));
-                    setPinLiked(true);
+                      .then(() => {
+                        navigate("/");
+                      });
                   }}
                 />
               ) : (
@@ -218,18 +235,20 @@ const PinDetail = ({ user, setShareBox }) => {
                   size={25}
                   className="cursor-pointer"
                   onClick={() => {
+                    setLikesCounts(likesCounts - 1);
+                    setPinLiked(false);
                     client
                       .patch(`${pinId}`)
+                      .unset([`likes[_key == "${likedKey}"]`])
                       .dec({ likesCount: 1 })
                       .commit()
-                      .then(console.log("done bro updated"));
-                    setPinLiked(false);
+                      .then(() => {
+                        navigate("/");
+                      });
                   }}
                 />
               )}
-              {pinDetails?.likesCount && pinLiked
-                ? pinDetails?.likesCount + 1
-                : pinDetails?.likesCount}
+              {likesCounts}
               <Link to={`comments`}>
                 <FaRegComment size={25} className="cursor-pointer mx-2" />
               </Link>
@@ -249,9 +268,8 @@ const PinDetail = ({ user, setShareBox }) => {
                 <FiBookmark
                   className="cursor-pointer"
                   size={25}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
+                  onClick={() => {
+                    
                     savePin(pinDetails._id);
                   }}
                 />

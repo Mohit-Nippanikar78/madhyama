@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { Link, Routes, Route, useNavigate, useParams } from "react-router-dom";
 import Pins from "./Pins";
 import { Sidebar, UserProfile } from "../components";
 import Logo from "../assets/logo.png";
@@ -8,7 +8,7 @@ import { HiMenu } from "react-icons/hi";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { client } from "../client";
 import { userQuery, fetchUser } from "../utils/data";
-import { PinDetail, Comments } from "../components";
+import { PinDetail, Comments,EditInfo } from "../components";
 import Share from "../components/share";
 
 const Home = ({ updateApp }) => {
@@ -101,9 +101,14 @@ const Home = ({ updateApp }) => {
             path="pin-detail/:pinId/comments"
             element={<Comments updateApp={updateApp} />}
           />
+          <Route path="pindetail/:pinId" element={<Pindetail />} />
           <Route
             path="profile/:userId"
             element={<UserProfile user={user && user} />}
+          />
+          <Route
+            path="profile/:userId/edit-info"
+            element={<EditInfo user={user && user} />}
           />
           <Route
             path="/*"
@@ -113,6 +118,15 @@ const Home = ({ updateApp }) => {
       </div>
     </div>
   );
+};
+const Pindetail = () => {
+  let { pinId } = useParams();
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate(`pin-detail/:${pinId}`, { replace: true });
+  }, []);
+
+  return <></>;
 };
 
 export default Home;

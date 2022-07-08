@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, Routes, Route, useParams, useNavigate } from "react-router-dom";
-import { client } from "../client";
+import { client, urlFor } from "../client";
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 import {
@@ -55,9 +55,9 @@ const UserProfile = ({ user }) => {
             <BsThreeDotsVertical size={20} />
             <button
               class="flex  mt-6 absolute w-max text-white bg-red-500 border-0 py-2 px-8 focus:outline-none hover:bg-red-800 rounded text-sm"
-              onClick={() => {}}
+              onClick={() => {navigate("edit-info")}}
             >
-              Change BG
+             Edit Profile
             </button>
           </div>
         </div>
@@ -76,7 +76,11 @@ const UserProfile = ({ user }) => {
         )}
 
         <img
-          src="https://wallpaperaccess.com/full/51364.jpg"
+          src={
+            userDetail.accDp
+              ? urlFor(userDetail.accDp).url()
+              : "https://wallpaperaccess.com/full/51364.jpg"
+          }
           className="w-full   shadow-md "
           style={{ maxHeight: "50vh" }}
           alt=""

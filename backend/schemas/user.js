@@ -1,3 +1,4 @@
+
 export default {
   name: "user",
   title: "User",
@@ -13,5 +14,12 @@ export default {
       title: "Image",
       type: "string",
     },
+    {
+      name: "accDp",
+      title: "Account Photo",
+      type: "image",
+      
+    },
+
   ],
 };

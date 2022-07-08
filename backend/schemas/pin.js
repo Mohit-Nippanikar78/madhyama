@@ -55,14 +55,16 @@ export default {
       of: [{ type: "comment" }],
     },
     {
-      name:"likes",
-      title:"Likes",
-      type:"array",
-      of:[{type:"likes"}]
-    },{
-      name:"likesCount",
-      title:"Likes Numbers ",
-      type:"number"
-    }
+      name: "likes",
+      title: "Likes",
+      type: "array",
+      of: [{ type: "likes" }],
+    },
+    {
+      name: "likesCount",
+      title: "Likes Numbers ",
+      type: "number",
+      initialValue:0
+    },
   ],
 };
