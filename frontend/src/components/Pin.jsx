@@ -104,8 +104,11 @@ const Pin = ({ pin }) => {
                     e.stopPropagation();
                     deletePin(pin._id);
                   }}
-                  className="bg-white p-1 rounded-full  flex items-center justify-center text-dark opacity-75 hover:opacity-100 outline-none"
-                >
+                  className="bg-white p-1 group rounded-full  flex items-center justify-center text-dark opacity-75 hover:opacity-100 outline-none"
+                > 
+                      <div className="absolute left-8 scale-0 group-hover:scale-100 transition-all duration-100 origin-left bg-black text-white bg-opacity-100">
+                        Delete Post 
+                      </div>
                   <AiTwotoneDelete fontSize={20} />
                 </button>
               )}

@@ -15,7 +15,6 @@ const Share = ({ setShareBox }) => {
       onClick={() => {
         console.log("body");
       }}
-      
     >
       <OutsideClickHandler
         onOutsideClick={() => {
@@ -29,7 +28,12 @@ const Share = ({ setShareBox }) => {
           }}
         >
           <div className="flex flex-col absolute" style={{ left: "-2rem" }}>
-            <MdOutlineCancel size={30} onClick={()=>{setShareBox(false)}} />
+            <MdOutlineCancel
+              size={30}
+              onClick={() => {
+                setShareBox(false);
+              }}
+            />
             Esc
           </div>
           <div className="flex " style={{ borderBottom: "1px white solid" }}>

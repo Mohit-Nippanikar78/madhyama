@@ -7,11 +7,11 @@ const Pins = ({ user,updateApp }) => {
   return (
     <div className="bg-gray-50 ">
       <div className=" border-solid border-black bg-gray-50">
-        <Navbar
+        {/* <Navbar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           user={user && user}
-        />
+        /> */}
       </div>
       <div>
         <Routes>
